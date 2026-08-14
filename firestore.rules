@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function authd(){return request.auth!=null;}
+  match /users/{uid}{
+   allow read: if authd();
+   allow create,update,delete: if authd()&&request.auth.uid==uid;
+  }
+  match /chats/{chatId}{
+   allow read,create,update: if authd() && request.auth.uid in resource.data.participants;
+   allow create: if authd() && request.auth.uid in request.resource.data.participants;
+   match /messages/{messageId}{
+    allow read,create: if authd() && exists(/databases/$(database)/documents/chats/$(chatId))
+      && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+   }
+  }
+  match /calls/{callId}{
+   allow create: if authd() && request.auth.uid==request.resource.data.callerId;
+   allow read,update: if authd() && request.auth.uid in resource.data.participants;
+   match /callerCandidates/{id}{allow read,write:if authd()&&request.auth.uid==get(/databases/$(database)/documents/calls/$(callId)).data.callerId;}
+   match /calleeCandidates/{id}{allow read,write:if authd()&&request.auth.uid==get(/databases/$(database)/documents/calls/$(callId)).data.calleeId;}
+  }
+ }
+}
