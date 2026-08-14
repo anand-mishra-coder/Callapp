@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>CallWave — Firebase Calls</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <section id="loginScreen" class="screen center">
+    <div class="auth-card">
+      <div class="logo">CW</div>
+      <h1>CallWave</h1>
+      <p>Real-time audio & video calls powered by Firebase + WebRTC.</p>
+      <button id="googleBtn" class="google-btn">Continue with Google</button>
+      <small>Use your own Firebase project configuration in <code>js/firebase-config.js</code>.</small>
+    </div>
+  </section>
+
+  <section id="appScreen" class="screen hidden">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">CW</span><span>CallWave</span></div>
+      <div class="me">
+        <img id="myPhoto" alt="">
+        <div><strong id="myName">—</strong><small id="myEmail">—</small></div>
+        <button id="signOutBtn" class="ghost">Sign out</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="side-title"><h2>People</h2><span id="onlineCount">0 online</span></div>
+        <input id="searchInput" class="search" placeholder="Search name or Gmail">
+        <div id="peopleList" class="people"></div>
+      </aside>
+
+      <section class="welcome">
+        <div class="welcome-icon">☎</div>
+        <h2>Select someone to call</h2>
+        <p>Both users must be signed in. Calls use WebRTC for media and Firestore for signaling.</p>
+        <div class="tips">
+          <span>● Audio call</span><span>● Video call</span><span>● Firestore signaling</span>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <div id="incomingModal" class="modal hidden">
+    <div class="modal-card">
+      <img id="incomingPhoto" class="avatar-xl" alt="">
+      <h2 id="incomingName">Incoming call</h2>
+      <p id="incomingEmail"></p>
+      <div id="incomingType"></div>
+      <div class="call-actions">
+        <button id="rejectBtn" class="danger">Decline</button>
+        <button id="acceptBtn" class="success">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="callModal" class="modal hidden">
+    <div class="call-card">
+      <div class="call-head">
+        <div><strong id="callName">Calling…</strong><small id="callStatus">Connecting</small></div>
+        <button id="muteBtn" class="round">Mic</button>
+      </div>
+      <div id="remoteStage" class="remote-stage">
+        <video id="remoteVideo" autoplay playsinline></video>
+        <div id="remotePlaceholder" class="remote-placeholder">Connecting…</div>
+        <video id="localVideo" autoplay muted playsinline></video>
+      </div>
+      <div class="call-controls">
+        <button id="videoBtn" class="round">Video</button>
+        <button id="speakerBtn" class="round">Speaker</button>
+        <button id="hangupBtn" class="hangup">End</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
